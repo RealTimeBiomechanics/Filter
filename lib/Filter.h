@@ -1,29 +1,33 @@
 #ifndef Filter_h
 #define Filter_h
+#include <array>
 #include <iostream>
+#include <vector>
+#include "TransferFunction.h"
 
-template <typename Algorithm>
+template<typename T>
 class Filter {
 
-public:	
-	Filter(Algorithm algorithm) : algorithm_(algorithm) {} 
-	double filt(double value) { return algorithm_.filter(value); }
-	void resetState() { algorithm_.resetState(); }
-	
-	template <typename T>
-	friend std::ostream& operator<< (std::ostream& os, const Filter<T>& filter);
+public:
+	Filter(const TransferFunction<T>& tf);
+	void resetState();
+	T filter(T value);
+	std::vector<T> pass(const std::vector<T>& values);
+	template<typename U>
+	friend std::ostream& operator<< (std::ostream& os, const Filter<U>& tf);
 private:
-	Algorithm algorithm_;
-
+	T directCoefficientsProduct() const;
+	T feedbackCoefficientsProduct() const;
+	void pushInput(T valueX);
+	void updateOutputState(T valueY);
+	TransferFunction<T> tf_;
+	std::vector<T>  x_;
+	std::vector<T>  y_; 
+	size_t count_;
+	size_t n_, m_;
 };
 
+#include "Filter.cpp"
 
-template <typename Algorithm>
-std::ostream& operator<< (std::ostream& os, const Filter<Algorithm>& filter) {
-
-	os << "Filter" << std::endl;
-	os << filter.algorithm_ << std::endl;
-	return os;
-}
 
 #endif
