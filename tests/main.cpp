@@ -16,11 +16,15 @@ int main() {
 
 	//coefficients from MATLAB 
 	// [numerator, denominator] = butter(2, .006, 'low')
-	Polynomial<double> numerator(std::vector<double>({ 8.76555487540065e-5, 17.5311097508013e-5, 8.76555487540065e-5 }));
-	Polynomial<double> denominator(std::vector<double>({ 1, -1.97334424978130, 0.973694871976315 }));
 
-	TransferFunction<double> tf(numerator, denominator);
+	Polynomial<double> numerator{ 8.76555487540065e-5, 17.5311097508013e-5, 8.76555487540065e-5 };
+	Polynomial<double> denominator{ 1, -1.97334424978130, 0.973694871976315 };
+
+	TransferFunction<double> tf(numerator, denominator), tfTest({ 1 }, { 1, 2, 3 });
+
+
 	Filter<double> filter(tf), filter2(tf*tf);
+	
 
 	//step response
 	std::vector<double> zeroes(1000, 0.0);

@@ -7,6 +7,11 @@ coefficients_(coefficients), order_(coefficients.size() - 1), size_(coefficients
 
 
 template <typename T>
+Polynomial<T>::Polynomial(const std::initializer_list<T>& coefficients):
+coefficients_(coefficients), order_(coefficients.size() - 1), size_(coefficients.size()) { }
+
+
+template <typename T>
 Polynomial<T>::Polynomial(size_t order) :
 coefficients_(order + 1, .0), size_(order + 1), order_(order) { }
 

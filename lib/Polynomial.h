@@ -2,6 +2,7 @@
 #define Polynomial_h
 #include <vector>
 #include <iostream>
+#include <initializer_list>
 
 template <typename T>
 class Polynomial {
@@ -9,6 +10,7 @@ class Polynomial {
 public:
 	Polynomial() {};
 	Polynomial(const std::vector<T>& coefficients);
+	Polynomial(const std::initializer_list<T>& coefficients);
 	Polynomial(size_t order);
 	unsigned getOrder() const;
 	size_t getSize() const;
