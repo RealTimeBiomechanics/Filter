@@ -1,5 +1,6 @@
 #include <vector>
 #include <iostream>
+#include <complex>
 
 template<typename T>
 Filter<T>::Filter(const TransferFunction<T>& tf) :
@@ -11,12 +12,12 @@ n_(tf_.denominator_.getSize()),
 m_(tf_.numerator_.getSize())  { }
 
 template<typename T>
-T Filter<T>::filter(T value) {
+typename Filter<T>::ValueType Filter<T>::filter(ValueType value) {
 
 	pushInput(value);
 	T result{ directCoefficientsProduct() + feedbackCoefficientsProduct() };
 	updateOutputState(result);
-	return result;
+	return result.real();
 }
 
 
@@ -41,7 +42,7 @@ T Filter<T>::feedbackCoefficientsProduct() const {
 
 
 template<typename T>
-void Filter<T>::pushInput(T valueX) {
+void Filter<T>::pushInput(ValueType valueX) {
 
 	++count_;
 	x_.at(count_ % m_) = valueX;
@@ -70,12 +71,12 @@ void Filter<T>::resetState() {
 
 
 template<typename T>
-std::vector<T> Filter<T>::pass(const std::vector<T>& values) {
+std::vector<typename Filter<T>::ValueType> Filter<T>::pass(const std::vector<ValueType>& values) {
 
 	resetState();
-	std::vector<T> filteredValues;
-	for (T val : values)
-		filteredValues.push_back(filter(val));
+	std::vector<typename Filter<T>::ValueType>filteredValues;
+	for (auto val : values)
+	filteredValues.push_back(filter(val));
 	return filteredValues;
 }
 

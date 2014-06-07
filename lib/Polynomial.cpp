@@ -62,7 +62,7 @@ Polynomial<T> multiply(const Polynomial<T>& p1, const Polynomial<T>& p2) {
 	for (unsigned i{ 0 }; i <= k; ++i)
 		resultCoefficients.at(k) += temp1.at(i)*temp2.at(k - i);
 
-	auto it = std::find_if(resultCoefficients.rbegin(), resultCoefficients.rend(), [](T v){ return v != 0;	});
+	auto it = std::find_if(resultCoefficients.rbegin(), resultCoefficients.rend(), [](T v){ return std::abs(v) != 0;	});
 
 	Polynomial<T> result(std::vector<T>(resultCoefficients.begin(), it.base()));
 

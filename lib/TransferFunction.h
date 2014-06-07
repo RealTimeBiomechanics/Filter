@@ -6,9 +6,9 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <complex>
 
-
-template<typename T>
+template<typename T = std::complex<double> >
 class TransferFunction {
 
 public:

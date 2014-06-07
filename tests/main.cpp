@@ -1,6 +1,6 @@
 #include "Filter.h"
 #include "TransferFunction.h"
-//#include "Designer.h"
+#include "Designer.h"
 #include <array>
 #include <iostream>
 #include <fstream>
@@ -10,6 +10,7 @@ using std::vector;
 #include <cstdlib>
 #include <algorithm>
 #include "Polynomial.h"
+#include <complex>
 
 
 int main() {
@@ -17,15 +18,15 @@ int main() {
 	//coefficients from MATLAB 
 	// [numerator, denominator] = butter(2, .006, 'low')
 
-	Polynomial<double> numerator{ 8.76555487540065e-5, 17.5311097508013e-5, 8.76555487540065e-5 };
-	Polynomial<double> denominator{ 1, -1.97334424978130, 0.973694871976315 };
+	Polynomial<> numerator{ 8.76555487540065e-5, 17.5311097508013e-5, 8.76555487540065e-5 };
+	Polynomial<> denominator{ 1, -1.97334424978130, 0.973694871976315 };
 
-	TransferFunction<double> tf(numerator, denominator), tfTest({ 1 }, { 1, 2, 3 });
+	TransferFunction<> tf(numerator, denominator), tfTest({ 1 }, { 1, 2, 3 });
 
 
-	Filter<double> filter(tf), filter2(tf*tf);
+	Filter<> filter(tf), filter2(tf*tf);
 	
-
+	
 	//step response
 	std::vector<double> zeroes(1000, 0.0);
 	std::vector<double> ones(1000, 1.0);
@@ -60,7 +61,7 @@ int main() {
 	
 	
 	//test linear phase fir filter 
-	std::vector<double> firB( { 
+	std::vector<std::complex<double>> firB( { 
 		 0.00127199776427371,
 		 0.00175973248875467,
 		-0.000474050123699974,
@@ -94,10 +95,10 @@ int main() {
 		 0.00127199776427371
 	} );
 
-	Polynomial<double> n(firB), d(std::vector<double>{ 1 });
+	Polynomial<> n(firB), d{ 1 };
 
-	TransferFunction<double> tfFir(n, d);
-	Filter<double> firFilter(tfFir);
+	TransferFunction<> tfFir(n, d);
+	Filter<> firFilter(tfFir);
 	vector<double> resultFir(firFilter.pass(step));
 
 	std::ofstream oF3("comparison.csv");
