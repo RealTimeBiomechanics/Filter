@@ -21,9 +21,7 @@ public:
 	TransferFunction operator* (const TransferFunction<T>& tf) const;
 	T a(unsigned i) const { return denominator_.getCoefficient(i); }
 	T b(unsigned i) const { return numerator_.getCoefficient(i); }
-	double getGainAt(double w) const {
-		return std::abs(getResponseAt(w));
-	}
+	double getGainAt(double w) const;
 	double getPhaseAt(double w) const {};
 
 	size_t getNumeratorSize() { return numerator_.getSize(); }
@@ -58,8 +56,14 @@ TransferFunction<T>  TransferFunction<T>::operator* (const TransferFunction<T>& 
 template<typename T>
 T TransferFunction<T>::getResponseAt(double w) const {
 
-	return numerator_.solveFor(std::complex<double>(0, w)) / denominator_.solveFor(std::complex<double>(0, w));
+	return numerator_.solveFor(std::exp(std::complex<double>(0, w))) / denominator_.solveFor(std::exp(std::complex<double>(0, w)));
 
+}
+
+template<typename T>
+double TransferFunction<T>::getGainAt(double w) const {
+
+	return 20*log10(std::abs(getResponseAt(w)));
 }
 
 

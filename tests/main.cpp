@@ -45,7 +45,7 @@ int main() {
 	
 	std::ofstream oFBode("bode.csv");
 	for (unsigned i{ 1 }; i < 1000; ++i)
-		oFBode << i << "," << tfDesigned.getGainAt(2 * M_PI*i) <<std::endl;
+		oFBode << i << "," << tfDesigned.getGainAt(M_PI/1000*i) <<std::endl;
 	oFBode.close();
 	/*
 	
