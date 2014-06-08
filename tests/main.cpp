@@ -10,39 +10,44 @@ using std::vector;
 #include <cstdlib>
 #include <algorithm>
 #include "Polynomial.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <complex>
 
 
 int main() {
 
-	//coefficients from MATLAB 
-	// [numerator, denominator] = butter(2, .006, 'low')
-
-	Polynomial<> numerator{ 8.76555487540065e-5, 17.5311097508013e-5, 8.76555487540065e-5 };
-	Polynomial<> denominator{ 1, -1.97334424978130, 0.973694871976315 };
-
-	TransferFunction<> tf(numerator, denominator), tfTest({ 1 }, { 1, 2, 3 });
-
-
-	Filter<> filter(tf), filter2(tf*tf);
-	
-	
 	//step response
-	std::vector<double> zeroes(1000, 0.0);
+	std::vector<double> zeroes(1, 0.0);
 	std::vector<double> ones(1000, 1.0);
 	std::vector<double> step(zeroes);
 	step.insert(step.end(), ones.begin(), ones.end());
 
-	std::cout << filter2;
+
+	//TransferFunction<double> tfDesigned(Designer::butter(2, 6., 1000.));
+	TransferFunction<std::complex<double>> tfDesigned(Designer::butter2ndOrder<std::complex<double>>(6, 1000.));
+
+	std::cout << "Designed filter\n";
+	Filter<std::complex<double>> filter(tfDesigned);
+	//Filter<double> filterDouble(tfDesigned*tfDesigned);
+
+	Filter<std::complex<double>> filter4th(Designer::butter<std::complex<double>>(4, 6, 1000));
+
+	//std::cout << filter;
+	//std::cout << filter4th;
+//	std::cout << filterDouble;
+
+	
 	std::ofstream oF("output.csv");
 	for (double val : step)
-		oF << val << "," << filter.filter(val) << ", " << filter2.filter(val) << std::endl;
+		oF << val << "," << std::abs(filter.filter(val)) << "," << std::abs(filter4th.filter(val)) << std::endl;
 	oF.close();
-
-
-	//test filtfilt
 	
-
+	std::ofstream oFBode("bode.csv");
+	for (unsigned i{ 1 }; i < 1000; ++i)
+		oFBode << i << "," << tfDesigned.getGainAt(2 * M_PI*i) <<std::endl;
+	oFBode.close();
+	/*
 	
 	//test filtfilt
 	vector<double> firstPass(filter.pass(step));
@@ -58,10 +63,10 @@ int main() {
 	oF2.close();
 
 
-	
+	/*
 	
 	//test linear phase fir filter 
-	std::vector<std::complex<double>> firB( { 
+	std::vector<double> firB( { 
 		 0.00127199776427371,
 		 0.00175973248875467,
 		-0.000474050123699974,
@@ -106,14 +111,16 @@ int main() {
 		oF3 << step.at(i) << "," << firstPass.at(i) << "," << secondPass.at(i) << ", " << resultFir.at(i) << std::endl;
 	oF3.close();
 
-
-	/*
-	std::vector<double> coeff({ 1, 2, 3, 4, 5});
-	Polynomial<double> p(coeff);
-	std::cout << p;
-	//std::cout << add(p, Polynomial<double>(std::vector<double>{ 1, 2, 3, 4 }));
-	std::cout << multiply(p, p);
-	std::cout << p*p;
+	
 	*/
+	Polynomial<double> p1{ 1, 2, 3, 4 };
+	Polynomial<double> p2{ 1, -2};
+
+	std::cout << "p1 = " << p1;
+	std::cout << "p1(3) = " << p1.solveFor(-1) << std::endl;
+//	TransferFunction<double> h1(p1, p2);
+
+	//std::cout << add(p, Polynomial<double>(std::vector<double>{ 1, 2, 3, 4 }));
+	
 	std::exit(EXIT_SUCCESS);
 }

@@ -71,6 +71,24 @@ Polynomial<T> multiply(const Polynomial<T>& p1, const Polynomial<T>& p2) {
 
 }
 
+
+template <typename T>
+void Polynomial<T>::divideByScalar(T value){
+
+	for (T& c : coefficients_)
+		c /= value;
+}
+
+template <typename T>
+T Polynomial<T>::solveFor(T value) const {
+
+	T r{ 0 };
+	for (unsigned i{ 0 }; i < size_; ++i)
+		r += coefficients_.at(i)*std::pow(value, i);
+	return r;
+}
+
+
 template <typename T>
 Polynomial<T> Polynomial<T>::operator* (const Polynomial<T>& p) const {
 

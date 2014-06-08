@@ -6,22 +6,20 @@
 #include "TransferFunction.h"
 #include <complex>
 
-template<typename T = std::complex<double>>
+template<typename T = double>
 class Filter {
 
 public:
-	typedef typename T::value_type ValueType;
-
 	Filter(const TransferFunction<T>& tf);
 	void resetState();
-	ValueType filter(ValueType value);
-	std::vector<ValueType> pass(const std::vector<ValueType>& values);
+	T filter(T value);
+	std::vector<T> pass(const std::vector<T>& values);
 	template<typename U>
 	friend std::ostream& operator<< (std::ostream& os, const Filter<U>& tf);
 private:
 	T directCoefficientsProduct() const;
 	T feedbackCoefficientsProduct() const;
-	void pushInput(ValueType valueX);
+	void pushInput(T valueX);
 	void updateOutputState(T valueY);
 	TransferFunction<T> tf_;
 	std::vector<T>  x_;

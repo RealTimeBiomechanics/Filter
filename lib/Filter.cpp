@@ -1,23 +1,23 @@
 #include <vector>
 #include <iostream>
-#include <complex>
+
 
 template<typename T>
 Filter<T>::Filter(const TransferFunction<T>& tf) :
 tf_(tf),
 count_(0),
-y_(tf_.denominator_.getSize(), .0),
-x_(tf_.numerator_.getSize(), .0),
-n_(tf_.denominator_.getSize()),
-m_(tf_.numerator_.getSize())  { }
+y_(tf_.getDenominatorSize(), .0),
+x_(tf_.getNumeratorSize(), .0),
+n_(tf_.getDenominatorSize()),
+m_(tf_.getNumeratorSize())  { }
 
 template<typename T>
-typename Filter<T>::ValueType Filter<T>::filter(ValueType value) {
+T Filter<T>::filter(T value) {
 
 	pushInput(value);
 	T result{ directCoefficientsProduct() + feedbackCoefficientsProduct() };
 	updateOutputState(result);
-	return result.real();
+	return result;
 }
 
 
@@ -42,7 +42,7 @@ T Filter<T>::feedbackCoefficientsProduct() const {
 
 
 template<typename T>
-void Filter<T>::pushInput(ValueType valueX) {
+void Filter<T>::pushInput(T valueX) {
 
 	++count_;
 	x_.at(count_ % m_) = valueX;
@@ -71,12 +71,12 @@ void Filter<T>::resetState() {
 
 
 template<typename T>
-std::vector<typename Filter<T>::ValueType> Filter<T>::pass(const std::vector<ValueType>& values) {
+std::vector<T> Filter<T>::pass(const std::vector<T>& values) {
 
 	resetState();
-	std::vector<typename Filter<T>::ValueType>filteredValues;
+	std::vector<T> filteredValues;
 	for (auto val : values)
-	filteredValues.push_back(filter(val));
+		filteredValues.push_back(filter(val));
 	return filteredValues;
 }
 
@@ -84,8 +84,7 @@ std::vector<typename Filter<T>::ValueType> Filter<T>::pass(const std::vector<Val
 template<typename T>
 std::ostream & operator<< (std::ostream& os, const Filter<T>& filter) {
 
-	os << "Numerator" << std::endl << filter.tf_.numerator_ << std::endl;
-	os << "Denominator" << std::endl << filter.tf_.denominator_ << std::endl;
+	//os << "Numerator" << std::endl << filter.tf_ << std::endl;
 
 	return os;
 }

@@ -5,7 +5,7 @@
 #include <initializer_list>
 #include <complex>
 
-template <typename T = std::complex<double>>
+template <typename T = double>
 class Polynomial {
 
 public:
@@ -13,9 +13,12 @@ public:
 	Polynomial(const std::vector<T>& coefficients);
 	Polynomial(const std::initializer_list<T>& coefficients);
 	Polynomial(size_t order);
+	T solveFor(T value) const;
 	unsigned getOrder() const;
 	size_t getSize() const;
 	T getCoefficient(unsigned i) const { return coefficients_.at(i); }
+	void divideByScalar(T value);
+
 
 	template<typename U>
 	friend Polynomial<U> multiply(const Polynomial<U>& p1, const Polynomial<U>& p2);
