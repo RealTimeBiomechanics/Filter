@@ -41,6 +41,7 @@ namespace Designer {
 		TransferFunction<T> tf(butter2ndOrder<T>(fc, fs));
 		for (unsigned i{ 2 }; i < order; i += 2)
 			tf = tf*butter2ndOrder<T>(fc, fs);
+		tf.setSamplingFrequency(fs);
 		return tf;
 	}
 	

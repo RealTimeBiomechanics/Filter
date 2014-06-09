@@ -2,9 +2,10 @@ template<typename T>
 void  TransferFunction<T>::normalize() {
 
 	Complex const normalFactor(a(0));
-	numerator_.divideByScalar(normalFactor);
-	denominator_.divideByScalar(normalFactor);
-
+	if (std::abs(normalFactor) != 0) {
+		numerator_.divideByScalar(normalFactor);
+		denominator_.divideByScalar(normalFactor);
+	}
 }
 
 

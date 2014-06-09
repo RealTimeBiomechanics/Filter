@@ -18,6 +18,36 @@ using std::vector;
 using std::cout;
 using std::endl;
 
+template <typename T>
+void stepResponse(Filter<T>& filter, std::string outFilename) {
+
+	std::vector<double> zeroes(1, 0.0);
+	std::vector<double> ones(1000, 1.0);
+	std::vector<double> step(zeroes);
+	step.insert(step.end(), ones.begin(), ones.end());
+
+	std::ofstream outF(outFilename);
+	std::vector<double> stepResponse(filter.pass(step));
+	cout << "Printing step response to " << outFilename << endl;
+	for (unsigned i{ 0 }; i < step.size(); ++i)
+		outF << step.at(i) << ", " << stepResponse.at(i) << endl;
+	outF.close();
+}
+
+
+template<typename T>
+void bodeDiagram(const TransferFunction<T>& tf, std::string outFilename) {
+
+	cout << "Printing bode diagram to " << outFilename << endl;
+	std::ofstream outF(outFilename);
+	std::vector<double> xValues, gain, phase;
+	tf.getBode(xValues, gain, phase);
+	for (unsigned i{ 0 }; i < xValues.size(); ++i)
+		outF << xValues.at(i) << ", " << gain.at(i) << ", " << phase.at(i) << endl;
+	outF.close();
+}
+
+
 int main() {
 
 	typedef std::complex<double> Complex;
@@ -59,9 +89,50 @@ int main() {
 	cout << "p2 + p1 = " << add<double>(p2, p1) << endl;
 	cout << "p3 + p1 = " << add<double>(p3, p1) << endl;
 	cout << "p4 + p1 = " << add<double>(p4, p1) << endl;
+	cout << endl;
+	
+	cout << "--------------------------" << endl;
+	cout << "|        TEST #2         |" << endl;
+	cout << "|    TransferFunction    |" << endl;
+	cout << "--------------------------" << endl;
+	cout << "Coefficients are normalised to the denominator" << endl;
+	cout << "Pole-zero simplifications are NOT implemented" << endl;
+	cout << "TF = p1/p2 " << endl << TransferFunction<double>(p1, p2) << endl;
+	cout << "TF = p2/p2 " << endl << TransferFunction<double>(p2, p2) << endl;
+	cout << "TF = p3/p2 " << endl << TransferFunction<double>(p3, p2) << endl;
+	cout << "TF = p4/p3 " << endl << TransferFunction<double>(p4, p3) << endl;
+	cout << "TF = p3/p4 " << endl << TransferFunction<double>(p3, p4) << endl;
+	cout << "TF = (1+2i)/p2 " << endl << TransferFunction<double>({ { 1, 2 } }, p2) << endl;
+	cout << endl;
+	
+	cout << "--------------------------" << endl;
+	cout << "|        TEST #3         |" << endl;
+	cout << "|    Filter Designer     |" << endl;
+	cout << "--------------------------" << endl;
+	cout << "IIR Filter, 2nd Order Low Pass Butterworth, cutoff frequency 6Hz, sample frequency 1000Hz" << endl;
+	TransferFunction<double> lowPass2nd(Designer::butter<double>(2, 6, 1000));
+	cout << lowPass2nd;
+	bodeDiagram(lowPass2nd, "lowPass2nd_bode.csv");
+	cout << endl;
 
-	
-	
+	cout << "IIR Filter, 6th Order Low Pass Butterworth, cutoff frequency 300Hz, sample frequency 1000Hz" << endl;
+	TransferFunction<double> lowPass6th(Designer::butter<double>(6, 300, 1000));
+	cout << lowPass6th;
+	bodeDiagram(lowPass6th, "lowPass6th_bode.csv");
+	cout << endl;
+
+	cout << "--------------------------" << endl;
+	cout << "|        TEST #4         |" << endl;
+	cout << "|     Step Response      |" << endl;
+	cout << "--------------------------" << endl;
+
+	cout << "IIR Filter, 2nd Order Low Pass Butterworth, cutoff frequency 6Hz, sample frequency 1000Hz" << endl;
+	stepResponse<double>(Filter<double>(lowPass2nd), "lowPass2nd_step.csv");
+	cout << endl;
+	cout << "IIR Filter, 6th Order Low Pass Butterworth, cutoff frequency 300Hz, sample frequency 1000Hz" << endl;
+	stepResponse<double>(Filter<double>(lowPass6th), "lowPass6th_step.csv");
+
+
 	/*
 	std::cout << "p1 = " << p1;
 	std::cout << "p1(3) = " << p1.solveFor(-1) << std::endl;
