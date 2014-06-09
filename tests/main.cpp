@@ -23,30 +23,37 @@ int main() {
 	std::vector<double> step(zeroes);
 	step.insert(step.end(), ones.begin(), ones.end());
 
-
-	//TransferFunction<double> tfDesigned(Designer::butter(2, 6., 1000.));
-	TransferFunction<std::complex<double>> tfDesigned(Designer::butter2ndOrder<std::complex<double>>(6, 1000.));
+	TransferFunction<double> tfDesigned(Designer::butter2ndOrder<double>(6, 1000.));
 
 	std::cout << "Designed filter\n";
-	Filter<std::complex<double>> filter(tfDesigned);
+	std::cout << tfDesigned.getSamplingFrequency() << std::endl;
+	Filter<double> filter(tfDesigned);
 	//Filter<double> filterDouble(tfDesigned*tfDesigned);
 
-	Filter<std::complex<double>> filter4th(Designer::butter<std::complex<double>>(4, 6, 1000));
+	Filter<double> filter4th(Designer::butter<double>(4, 6, 1000));
 
 	//std::cout << filter;
 	//std::cout << filter4th;
 //	std::cout << filterDouble;
 
-	
+	/*
 	std::ofstream oF("output.csv");
 	for (double val : step)
 		oF << val << "," << std::abs(filter.filter(val)) << "," << std::abs(filter4th.filter(val)) << std::endl;
 	oF.close();
 	
-	std::ofstream oFBode("bode.csv");
-	for (unsigned i{ 1 }; i < 1000; ++i)
-		oFBode << i << "," << tfDesigned.getGainAt(M_PI/1000*i) <<std::endl;
+	std::ofstream oFBode("bode_gain.csv");
+	std::vector<double> xValues, gain, phase;
+	tfDesigned.getBode(xValues, gain, phase);
+	for (unsigned i{ 0 }; i < xValues.size(); ++i)
+		oFBode << xValues.at(i) << "," << gain.at(i) << "," << phase.at(i) << std::endl;
 	oFBode.close();
+	/*
+	std::ofstream oFBodePhase("bode_phase.csv");
+	for (unsigned i{ 1 }; i < 1000; ++i)
+		oFBodePhase << M_PI / 1000 * i << "," << tfDesigned.getPhaseAt(M_PI / 1000 * i) << std::endl;
+	oFBodePhase.close();
+
 	/*
 	
 	//test filtfilt

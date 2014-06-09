@@ -7,18 +7,19 @@
 
 template <typename T = double>
 class Polynomial {
-
+	
 public:
+	typedef std::complex<T> Complex;
 	Polynomial() {};
-	Polynomial(const std::vector<T>& coefficients);
+	Polynomial(const std::vector<Complex>& coefficients);
+	Polynomial(const std::initializer_list<Complex>& coefficients);
 	Polynomial(const std::initializer_list<T>& coefficients);
 	Polynomial(size_t order);
-	T solveFor(T value) const;
+	Complex solveFor(Complex value) const;
 	unsigned getOrder() const;
 	size_t getSize() const;
-	T getCoefficient(unsigned i) const { return coefficients_.at(i); }
-	void divideByScalar(T value);
-
+	Complex getCoefficient(unsigned i) const { return coefficients_.at(i); }
+	void divideByScalar(Complex value);
 
 	template<typename U>
 	friend Polynomial<U> multiply(const Polynomial<U>& p1, const Polynomial<U>& p2);
@@ -31,9 +32,8 @@ public:
 	template<typename U>
 	friend std::ostream& operator<< (std::ostream& os, const Polynomial<U>& p);
 
-
 private:
-	std::vector<T> coefficients_;
+	std::vector<Complex> coefficients_;
 	size_t order_;
 	size_t size_;
 };

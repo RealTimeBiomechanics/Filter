@@ -30,7 +30,9 @@ namespace Designer {
 	TransferFunction<T> butter2ndOrder(double fc, double fs) {
 
 		double const wc{ tan((M_PI*fc) / fs) };
-		return butter2ndOrder<T>(wc);
+		TransferFunction<T> tf(butter2ndOrder<T>(wc));
+		tf.setSamplingFrequency(fs);
+		return tf;
 	}
 
 	template<typename T>

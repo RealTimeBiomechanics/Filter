@@ -2,19 +2,28 @@
 #include <vector>
 
 template <typename T>
-Polynomial<T>::Polynomial(const std::vector<T>& coefficients) :
+Polynomial<T>::Polynomial(const std::vector<Complex>& coefficients) :
 coefficients_(coefficients), order_(coefficients.size() - 1), size_(coefficients.size()) { }
 
 
 template <typename T>
-Polynomial<T>::Polynomial(const std::initializer_list<T>& coefficients):
+Polynomial<T>::Polynomial(const std::initializer_list<Complex>& coefficients):
 coefficients_(coefficients), order_(coefficients.size() - 1), size_(coefficients.size()) { }
+
+
+template <typename T>
+Polynomial<T>::Polynomial(const std::initializer_list<T>& coefficients) :
+order_(coefficients.size() - 1), size_(coefficients.size()) { 
+
+	for (auto c : coefficients)
+		coefficients_.push_back(c);
+}
+
 
 
 template <typename T>
 Polynomial<T>::Polynomial(size_t order) :
 coefficients_(order + 1, .0), size_(order + 1), order_(order) { }
-
 
 
 template <typename T>
@@ -48,9 +57,10 @@ Polynomial<T> add(const Polynomial<T>& p1, const Polynomial<T>& p2) {
 template <typename T>
 Polynomial<T> multiply(const Polynomial<T>& p1, const Polynomial<T>& p2) {
 
+	typedef typename Polynomial<T>::Complex Complex;
 	size_t resultOrder(p1.getOrder() + p2.getOrder());
-	std::vector<T> resultCoefficients(2 * resultOrder + 1);
-	std::vector<T> temp1(2 * resultOrder + 1), temp2(2 * resultOrder + 1);
+	std::vector<Complex> resultCoefficients(2 * resultOrder + 1);
+	std::vector<Complex> temp1(2 * resultOrder + 1), temp2(2 * resultOrder + 1);
 	for (unsigned i{ 0 }; i < p1.getSize(); ++i)
 		temp1.at(i) = p1.coefficients_.at(i);
 
@@ -62,9 +72,9 @@ Polynomial<T> multiply(const Polynomial<T>& p1, const Polynomial<T>& p2) {
 	for (unsigned i{ 0 }; i <= k; ++i)
 		resultCoefficients.at(k) += temp1.at(i)*temp2.at(k - i);
 
-	auto it = std::find_if(resultCoefficients.rbegin(), resultCoefficients.rend(), [](T v){ return std::abs(v) != 0;	});
+	auto it = std::find_if(resultCoefficients.rbegin(), resultCoefficients.rend(), [](Complex v){ return std::abs(v) != 0;	});
 
-	Polynomial<T> result(std::vector<T>(resultCoefficients.begin(), it.base()));
+	Polynomial<T> result(std::vector<Complex>(resultCoefficients.begin(), it.base()));
 
 	return result;
 
@@ -73,16 +83,16 @@ Polynomial<T> multiply(const Polynomial<T>& p1, const Polynomial<T>& p2) {
 
 
 template <typename T>
-void Polynomial<T>::divideByScalar(T value){
+void Polynomial<T>::divideByScalar(Complex value){
 
-	for (T& c : coefficients_)
+	for (Complex& c : coefficients_)
 		c /= value;
 }
 
 template <typename T>
-T Polynomial<T>::solveFor(T value) const {
+typename Polynomial<T>::Complex Polynomial<T>::solveFor(Complex value) const {
 
-	T r{ 0 };
+	Complex r{ 0 };
 	for (unsigned i{ 0 }; i < size_; ++i)
 		r += coefficients_.at(i)*std::pow(value, i);
 	return r;

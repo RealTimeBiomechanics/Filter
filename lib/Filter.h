@@ -10,6 +10,7 @@ template<typename T = double>
 class Filter {
 
 public:
+	typedef std::complex<T> Complex;
 	Filter(const TransferFunction<T>& tf);
 	void resetState();
 	T filter(T value);
@@ -17,13 +18,13 @@ public:
 	template<typename U>
 	friend std::ostream& operator<< (std::ostream& os, const Filter<U>& tf);
 private:
-	T directCoefficientsProduct() const;
-	T feedbackCoefficientsProduct() const;
-	void pushInput(T valueX);
-	void updateOutputState(T valueY);
+	Complex directCoefficientsProduct() const;
+	Complex feedbackCoefficientsProduct() const;
+	void pushInput(Complex valueX);
+	void updateOutputState(Complex valueY);
 	TransferFunction<T> tf_;
-	std::vector<T>  x_;
-	std::vector<T>  y_; 
+	std::vector<Complex>  x_;
+	std::vector<Complex>  y_; 
 	size_t count_;
 	size_t n_, m_;
 };
