@@ -1,6 +1,8 @@
+#include "Polynomial.h"
 #include "Filter.h"
 #include "TransferFunction.h"
 #include "Designer.h"
+
 #include <array>
 #include <iostream>
 #include <fstream>
@@ -9,13 +11,61 @@ using std::vector;
 #include <fstream>
 #include <cstdlib>
 #include <algorithm>
-#include "Polynomial.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <complex>
 
+using std::cout;
+using std::endl;
 
 int main() {
+
+	typedef std::complex<double> Complex;
+	cout << "--------------------------" << endl;
+	cout << "|        TEST #1         |" << endl;
+	cout << "|       Polynomial       |" << endl;
+	cout << "--------------------------" << endl;
+
+	Polynomial<double> p1{ 1, 2 };
+	Polynomial<double> p2{ 1, -2, 0 };
+	Polynomial<double> p3{ 0, 2, 3, 4 };
+	Polynomial<double> p4{ 5 };
+
+	cout << "p1 =" << p1;
+	cout << "p2 =" << p2;
+	cout << "p3 =" << p3;
+	cout << "p4 =" << p4;
+	cout << endl;
+	cout << "Scalar Multiplication" << endl;
+	cout << "p1 * 2 = " << multiply<double>(p1, { 2 }) << endl;
+	cout << "p2 * 3 = " << multiply<double>(p2, { 3 }) << endl;
+	cout << "p3 * 4 = " << multiply<double>(p3, { 4 }) << endl;
+	cout << "p4 * 5 = " << multiply<double>(p4, { 5 }) << endl;
+	cout << endl;
+	cout << "Complex Multiplication" << endl;
+	cout << "p1 * (2 + 2i) = " << multiply<double>(p1, { Complex(2, 2) }) << endl;
+	cout << "p2 * (3 - 3i) = " << multiply<double>(p2, { Complex(3, -3) }) << endl;
+	cout << "p3 * (4 + 4i) = " << multiply<double>(p3, { Complex(4, 4) }) << endl;
+	cout << "p4 * (5 - 5i) = " << multiply<double>(p4, { Complex(5, -5) }) << endl;
+	cout << endl;
+	cout << "Polynomial Multiplication" << endl;
+	cout << "p1 * p1 = " << p1*p1 << endl;
+	cout << "p2 * p1 = " << p2*p1 << endl;
+	cout << "p3 * p1 = " << p3*p1 << endl;
+	cout << "p4 * p1 = " << p4*p1 << endl;
+	cout << endl;
+	cout << "Polynomial Addition" << endl;
+	cout << "p1 + p1 = " << add<double>(p1, p1) << endl;
+	cout << "p2 + p1 = " << add<double>(p2, p1) << endl;
+	cout << "p3 + p1 = " << add<double>(p3, p1) << endl;
+	cout << "p4 + p1 = " << add<double>(p4, p1) << endl;
+
+	
+	
+	/*
+	std::cout << "p1 = " << p1;
+	std::cout << "p1(3) = " << p1.solveFor(-1) << std::endl;
+
 
 	//step response
 	std::vector<double> zeroes(1, 0.0);
@@ -28,8 +78,7 @@ int main() {
 	std::cout << "Designed filter\n";
 	std::cout << tfDesigned.getSamplingFrequency() << std::endl;
 	Filter<double> filter(tfDesigned);
-	//Filter<double> filterDouble(tfDesigned*tfDesigned);
-
+	
 	Filter<double> filter4th(Designer::butter<double>(4, 6, 1000));
 
 	//std::cout << filter;
@@ -120,12 +169,7 @@ int main() {
 
 	
 	*/
-	Polynomial<double> p1{ 1, 2, 3, 4 };
-	Polynomial<double> p2{ 1, -2};
-
-	std::cout << "p1 = " << p1;
-	std::cout << "p1(3) = " << p1.solveFor(-1) << std::endl;
-//	TransferFunction<double> h1(p1, p2);
+	//	TransferFunction<double> h1(p1, p2);
 
 	//std::cout << add(p, Polynomial<double>(std::vector<double>{ 1, 2, 3, 4 }));
 	

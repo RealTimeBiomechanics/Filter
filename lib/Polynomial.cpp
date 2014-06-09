@@ -3,22 +3,54 @@
 
 template <typename T>
 Polynomial<T>::Polynomial(const std::vector<Complex>& coefficients) :
-coefficients_(coefficients), order_(coefficients.size() - 1), size_(coefficients.size()) { }
+coefficients_(coefficients) { 
+
+	removeHighOrderZeroCoefficients();
+	updateOrderAndSize();
+	
+}
 
 
 template <typename T>
 Polynomial<T>::Polynomial(const std::initializer_list<Complex>& coefficients):
-coefficients_(coefficients), order_(coefficients.size() - 1), size_(coefficients.size()) { }
+coefficients_(coefficients) { 
+
+	removeHighOrderZeroCoefficients();
+	updateOrderAndSize();
+
+}
 
 
 template <typename T>
-Polynomial<T>::Polynomial(const std::initializer_list<T>& coefficients) :
-order_(coefficients.size() - 1), size_(coefficients.size()) { 
+Polynomial<T>::Polynomial(const std::initializer_list<T>& coefficients) { 
 
 	for (auto c : coefficients)
 		coefficients_.push_back(c);
+
+	removeHighOrderZeroCoefficients();
+	updateOrderAndSize();
 }
 
+template <typename T>
+void Polynomial<T>::updateOrderAndSize() {
+
+	size_ = coefficients_.size();
+	order_ = size_ - 1;
+}
+
+template <typename T>
+void Polynomial<T>::removeHighOrderZeroCoefficients() {
+
+	Complex sum(0);
+	for (auto c : coefficients_)
+		sum += c;
+
+	if (coefficients_.size() > 1 && std::abs(sum) !=  0 ) {
+		auto it = std::find_if(coefficients_.rbegin(), coefficients_.rend(), [](Complex v){ return std::abs(v) != 0;	});
+		coefficients_.erase(it.base(), coefficients_.end());
+	}
+	updateOrderAndSize();
+}
 
 
 template <typename T>
@@ -50,6 +82,7 @@ Polynomial<T> add(const Polynomial<T>& p1, const Polynomial<T>& p2) {
 		if (i < p2.getSize())
 			result.coefficients_.at(i) += p2.coefficients_.at(i);
 	}
+	result.removeHighOrderZeroCoefficients();
 	return result;
 }
 
@@ -58,24 +91,31 @@ template <typename T>
 Polynomial<T> multiply(const Polynomial<T>& p1, const Polynomial<T>& p2) {
 
 	typedef typename Polynomial<T>::Complex Complex;
+	
 	size_t resultOrder(p1.getOrder() + p2.getOrder());
-	std::vector<Complex> resultCoefficients(2 * resultOrder + 1);
-	std::vector<Complex> temp1(2 * resultOrder + 1), temp2(2 * resultOrder + 1);
-	for (unsigned i{ 0 }; i < p1.getSize(); ++i)
-		temp1.at(i) = p1.coefficients_.at(i);
+	Polynomial<T> result(resultOrder);
+	if (resultOrder == 0) {
+		result.coefficients_.at(0) = p1.coefficients_.at(0)*p2.coefficients_.at(0);
+	}
+	else {
+		std::vector<Complex> resultCoefficients(2 * resultOrder + 1);
+		std::vector<Complex> temp1(2 * resultOrder + 1), temp2(2 * resultOrder + 1);
+		for (unsigned i{ 0 }; i < p1.getSize(); ++i)
+			temp1.at(i) = p1.coefficients_.at(i);
 
-	for (unsigned i{ 0 }; i < p2.getSize(); ++i)
-		temp2.at(i) = p2.coefficients_.at(i);
+		for (unsigned i{ 0 }; i < p2.getSize(); ++i)
+			temp2.at(i) = p2.coefficients_.at(i);
 
 
-	for (unsigned k{ 0 }; k < resultCoefficients.size() - 1; ++k)
-	for (unsigned i{ 0 }; i <= k; ++i)
-		resultCoefficients.at(k) += temp1.at(i)*temp2.at(k - i);
+		for (unsigned k{ 0 }; k < resultCoefficients.size() - 1; ++k)
+			for (unsigned i{ 0 }; i <= k; ++i)
+				resultCoefficients.at(k) += temp1.at(i)*temp2.at(k - i);
 
-	auto it = std::find_if(resultCoefficients.rbegin(), resultCoefficients.rend(), [](Complex v){ return std::abs(v) != 0;	});
+		auto it = std::find_if(resultCoefficients.rbegin(), resultCoefficients.rend(), [](Complex v){ return std::abs(v) != 0;	});
 
-	Polynomial<T> result(std::vector<Complex>(resultCoefficients.begin(), it.base()));
-
+		Polynomial<T> polyResult(std::vector<Complex>(resultCoefficients.begin(), it.base()));
+		result = polyResult;
+	}
 	return result;
 
 
@@ -111,7 +151,7 @@ std::ostream& operator<< (std::ostream& os, const Polynomial<T>& p) {
 	os << "[";
 	for (auto c(p.coefficients_.begin()); c != p.coefficients_.end() - 1; ++c)
 		os << *c << ", ";
-	os << p.coefficients_.back() << "]" << std::endl;
+	os << p.coefficients_.back() << "]";
 
 	return os;
 }

@@ -10,7 +10,7 @@ class Polynomial {
 	
 public:
 	typedef std::complex<T> Complex;
-	Polynomial() {};
+	Polynomial()  = delete;
 	Polynomial(const std::vector<Complex>& coefficients);
 	Polynomial(const std::initializer_list<Complex>& coefficients);
 	Polynomial(const std::initializer_list<T>& coefficients);
@@ -33,6 +33,8 @@ public:
 	friend std::ostream& operator<< (std::ostream& os, const Polynomial<U>& p);
 
 private:
+	void removeHighOrderZeroCoefficients();
+	void updateOrderAndSize();
 	std::vector<Complex> coefficients_;
 	size_t order_;
 	size_t size_;
