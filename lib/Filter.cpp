@@ -3,6 +3,28 @@
 
 
 template<typename T>
+Filter<T>::Filter() :
+count_(0),
+tf_({ 1 }, { 1 }),
+y_(tf_.getDenominatorSize(), .0),
+x_(tf_.getNumeratorSize(), .0),
+n_(tf_.getDenominatorSize()),
+m_(tf_.getNumeratorSize()) { }
+
+
+template<typename T>
+void Filter<T>::setTransferFunction(const TransferFunction<T>& tf) {
+
+	tf_ = tf;
+	n_ = tf_.getDenominatorSize();
+	m_ = tf_.getNumeratorSize();
+	y_.resize(n_);
+	x_.resize(m_);
+	resetState();
+}
+
+
+template<typename T>
 Filter<T>::Filter(const TransferFunction<T>& tf) :
 tf_(tf),
 count_(0),
@@ -10,6 +32,7 @@ y_(tf_.getDenominatorSize(), .0),
 x_(tf_.getNumeratorSize(), .0),
 n_(tf_.getDenominatorSize()),
 m_(tf_.getNumeratorSize())  { }
+
 
 template<typename T>
 T Filter<T>::filter(T value) {

@@ -11,7 +11,9 @@ class Filter {
 
 public:
 	typedef std::complex<T> Complex;
+    Filter();
 	Filter(const TransferFunction<T>& tf);
+	void setTransferFunction(const TransferFunction<T>& tf);
 	void resetState();
 	T filter(T value);
 	std::vector<T> pass(const std::vector<T>& values);
