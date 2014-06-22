@@ -16,6 +16,9 @@ class TransferFunction {
 
 public:
 	typedef std::complex<T> Complex;
+
+	TransferFunction() : numerator_({ { 1 } }), denominator_({ { 1 } }), samplingFrequency_(0.) { }
+
 	TransferFunction(const Polynomial<T>& numerator, const Polynomial<T>& denominator) :
 		numerator_(numerator), denominator_(denominator), samplingFrequency_(0.){
 		normalize();
