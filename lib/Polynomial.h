@@ -14,6 +14,9 @@ public:
 	Polynomial(const std::vector<Complex>& coefficients);
 	Polynomial(const std::initializer_list<Complex>& coefficients);
 	Polynomial(const std::initializer_list<T>& coefficients);
+	Polynomial(const Polynomial<T>& rhs);
+	Polynomial<T>& operator=(const Polynomial<T>& rhs);
+
 	Polynomial(size_t order);
 	Complex solveFor(Complex value) const;
 	unsigned getOrder() const;

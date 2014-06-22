@@ -32,6 +32,22 @@ Polynomial<T>::Polynomial(const std::initializer_list<T>& coefficients) {
 }
 
 template <typename T>
+Polynomial<T>::Polynomial(const Polynomial<T>& rhs) : 
+coefficients_(rhs.coefficients_),
+order_(rhs.order_),
+size_(rhs.size_) { }
+
+
+template <typename T>
+Polynomial<T>& Polynomial<T>::operator=(const Polynomial<T>& rhs)  {
+	
+	coefficients_ = rhs.coefficients_;
+	order_ = rhs.order_;
+	size_ = rhs.size_;
+	return *this;
+}
+
+template <typename T>
 void Polynomial<T>::updateOrderAndSize() {
 
 	size_ = coefficients_.size();
