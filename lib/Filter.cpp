@@ -107,7 +107,19 @@ std::vector<T> Filter<T>::pass(const std::vector<T>& values) {
 template<typename T>
 std::ostream & operator<< (std::ostream& os, const Filter<T>& filter) {
 
-	//os << "Numerator" << std::endl << filter.tf_ << std::endl;
+	os << filter.tf_ << std::endl;
+
+	os << "State" << std::endl;
+	os << "x: ";
+	for (auto e : filter.x_)
+		os << e << " ";
+	os << std::endl;
+
+	os << "y: ";
+	for (auto e : filter.y_)
+		os << e << " ";
+	os << std::endl;
+
 
 	return os;
 }
