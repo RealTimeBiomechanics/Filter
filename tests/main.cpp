@@ -127,10 +127,12 @@ int main() {
 	cout << "--------------------------" << endl;
 
 	cout << "IIR Filter, 2nd Order Low Pass Butterworth, cutoff frequency 6Hz, sample frequency 1000Hz" << endl;
-	stepResponse<double>(Filter<double>(lowPass2nd), "lowPass2nd_step.csv");
+	Filter<double> filterLowPass2nd(lowPass2nd);
+	stepResponse<double>(filterLowPass2nd, "lowPass2nd_step.csv");
 	cout << endl;
 	cout << "IIR Filter, 6th Order Low Pass Butterworth, cutoff frequency 300Hz, sample frequency 1000Hz" << endl;
-	stepResponse<double>(Filter<double>(lowPass6th), "lowPass6th_step.csv");
+	Filter<double> filterLowPass6th(lowPass6th);
+	stepResponse<double>(filterLowPass6th, "lowPass6th_step.csv");
 	cout << endl;
 
 	cout << "--------------------------" << endl;
@@ -141,7 +143,7 @@ int main() {
 	Filter<double> emptyFilter;
 	emptyFilter.setTransferFunction(lowPass2nd);
 	cout << "Late initialization. IIR Filter, 2nd Order Low Pass Butterworth, cutoff frequency 6Hz, sample frequency 1000Hz" << endl;
-	stepResponse<double>(Filter<double>(lowPass2nd), "lowPass2nd_step_lateInit.csv");
+	stepResponse<double>(emptyFilter, "lowPass2nd_step_lateInit.csv");
 
 	/*
 	std::cout << "p1 = " << p1;
