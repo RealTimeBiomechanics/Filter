@@ -1,0 +1,6 @@
+#CMake configuration file for Filter library
+@PACKAGE_INIT@
+
+set_and_check(Filter_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
+
+
