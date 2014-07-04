@@ -1,7 +1,4 @@
-set(Filter_HEADERS  ${CMAKE_SOURCE_DIR}/lib/Polynomial.h)
-set(Filter_SOURCES ${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${Filter_INCLUDE_DIR})
 
-add_executable(filter main.cpp  ${Filter_HEADERS} ${Filter_SOURCES})
+add_executable(filter main.cpp)
 
-#TARGET_LINK_LIBRARIES( scalerPlus#	  ${OPENSIM_LIBRARIES}
-#)
