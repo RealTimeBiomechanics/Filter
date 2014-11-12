@@ -12,8 +12,9 @@ set(Filter_TEMPLATE_IMPLEMENTATIONS include/vosl/Filter/Filter.cpp
 set_source_files_properties(${Filter_TEMPLATE_IMPLEMENTATIONS} PROPERTIES HEADER_FILE_ONLY TRUE)
 
 source_group("Header files" FILES ${Filter_HEADERS})
-source_group("Source files" FILES ${Filter_TEMPLATE_IMPLEMENTATIONS} ${Filter_SOURCES})
+source_group("Source files" FILES ${Filter_TEMPLATE_IMPLEMENTATIONS})
 
+add_library(FilterLib ${Filter_HEADERS} ${Filter_TEMPLATE_IMPLEMENTATIONS})
 set(Filter_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE PATH "Include directory for Concurrency library" FORCE)
 mark_as_advanced(Filter_INCLUDE_DIR)
 
