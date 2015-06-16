@@ -27,14 +27,13 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/FilterConfigVersion
                                     VERSION 0.1
                                     COMPATIBILITY ExactVersion )
 
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FilterConfigForInstall.cmake   
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FilterConfigForInstall.cmake
               DESTINATION ${ConfigPackageLocation}
               RENAME FilterConfig.cmake)
-              
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FilterConfigVersion.cmake
-              DESTINATION ${ConfigPackageLocation})                                    
-                                    
+              DESTINATION ${ConfigPackageLocation})
+
 # Uninstall target
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
