@@ -1,4 +1,4 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${Filter_INCLUDE_DIR})
+include_directories(${Filter_INCLUDE_DIRS})
 
-add_executable(filter main.cpp)
+add_executable(Test_Filter main.cpp)
 
