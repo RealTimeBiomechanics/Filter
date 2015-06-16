@@ -13,6 +13,7 @@ set_source_files_properties(${Filter_TEMPLATE_IMPLEMENTATIONS} PROPERTIES HEADER
 
 source_group("Header files" FILES ${Filter_HEADERS})
 source_group("Source files" FILES ${Filter_TEMPLATE_IMPLEMENTATIONS} ${Filter_SOURCES})
+include_directories(include)
 add_library(Filter ${Filter_HEADERS} ${Filter_TEMPLATE_IMPLEMENTATIONS} ${Filter_SOURCES} )
 set(Filter_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH "Include directory for Filter library" FORCE)
 mark_as_advanced(Filter_INCLUDE_DIRS)
