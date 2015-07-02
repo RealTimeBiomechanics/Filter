@@ -1,11 +1,13 @@
 #Author: Elena Ceseracciu
 
 set(Filter_HEADERS vosl/Filter/Filter.h
+                   vosl/Filter/StateSpaceFilter.h
                    vosl/Filter/TransferFunction.h
                    vosl/Filter/Polynomial.h
                    vosl/Filter/Designer.h)
 
 set(Filter_TEMPLATE_IMPLEMENTATIONS vosl/Filter/Filter.cpp
+                                    vosl/Filter/StateSpaceFilter.cpp
                                     vosl/Filter/Polynomial.cpp
                                     vosl/Filter/TransferFunction.cpp
 )

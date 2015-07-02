@@ -2,6 +2,7 @@
 #include "vosl/Filter/Filter.h"
 #include "vosl/Filter/TransferFunction.h"
 #include "vosl/Filter/Designer.h"
+#include "vosl/Filter/StateSpaceFilter.h"
 using namespace vosl::Filter;
 
 #include <array>
@@ -132,6 +133,15 @@ int main() {
     stepResponse<double>(filterLowPass6th, "lowPass6th_step.csv");
     cout << endl;
 
+    StateSpaceFilter<double> ssFilter;
+    std::vector<double> times = {0.01, 0.02, 0.032, 0.038, 0.05, 0.063, 0.07, 0.09, 0.102, 0.11, 0.119, 0.14};
+    std::ofstream outF("stateSpaceFilter_300_step.csv");
+    cout << "Printing step response to stateSpaceFilter_300_step.csv" << endl;
+    outF << 0.0 << ", " << 0.0 << ", " << ssFilter.filter(0.0, 0.0, 300) << std::endl;
+    for (auto t : times)
+        outF << t << ", " << 1.0 << ", " << ssFilter.filter(1.0, t, 300) << std::endl;
+    outF.close();
+
     cout << "--------------------------" << endl;
     cout << "|        TEST #5         |" << endl;
     cout << "|Filter def. constructor |" << endl;
@@ -141,6 +151,7 @@ int main() {
     emptyFilter.setTransferFunction(lowPass2nd);
     cout << "Late initialization. IIR Filter, 2nd Order Low Pass Butterworth, cutoff frequency 6Hz, sample frequency 1000Hz" << endl;
     stepResponse<double>(emptyFilter, "lowPass2nd_step_lateInit.csv");
+
 
     /*
     std::cout << "p1 = " << p1;
