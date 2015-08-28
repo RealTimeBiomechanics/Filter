@@ -13,6 +13,16 @@ namespace vosl {
         }
 
         template <typename T>
+        Polynomial<T>::Polynomial(const std::vector<T>& coefficients)
+        {
+            for (auto c : coefficients)
+                coefficients_.push_back(c);
+
+            removeHighOrderZeroCoefficients();
+            updateOrderAndSize();
+        }
+
+        template <typename T>
         Polynomial<T>::Polynomial(const std::initializer_list<Complex>& coefficients) :
             coefficients_(coefficients) {
 

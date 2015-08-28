@@ -14,6 +14,7 @@ namespace vosl {
         public:
             typedef std::complex<T> Complex;
             Polynomial() = delete;
+            Polynomial(const std::vector<T>& coefficients);
             Polynomial(const std::vector<Complex>& coefficients);
             Polynomial(const std::initializer_list<Complex>& coefficients);
             Polynomial(const std::initializer_list<T>& coefficients);

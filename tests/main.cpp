@@ -34,6 +34,22 @@ void stepResponse(Filter<T>& filter, std::string outFilename) {
     outF.close();
 }
 
+template <typename T>
+void stepResponse(StateSpaceFilter<T>& filter, double f0, std::string outFilename) {
+
+    std::vector<double> zeroes(1, 0.0);
+    std::vector<double> ones(1000, 1.0);
+    std::vector<double> step(zeroes);
+    step.insert(step.end(), ones.begin(), ones.end());
+
+    std::ofstream outF(outFilename);
+    std::vector<double> stepResponse(filter.pass(step, f0));
+    cout << "Printing step response to " << outFilename << endl;
+    for (unsigned i{ 0 }; i < step.size(); ++i)
+        outF << step.at(i) << ", " << stepResponse.at(i) << endl;
+    outF.close();
+}
+
 template<typename T>
 void bodeDiagram(const TransferFunction<T>& tf, std::string outFilename) {
 
@@ -134,7 +150,7 @@ int main() {
     cout << endl;
 
     StateSpaceFilter<double> ssFilter;
-    std::vector<double> times = {0.01, 0.02, 0.032, 0.038, 0.05, 0.063, 0.07, 0.09, 0.102, 0.11, 0.119, 0.14};
+    std::vector<double> times = { 0.01, 0.02, 0.032, 0.038, 0.05, 0.063, 0.07, 0.09, 0.102, 0.11, 0.119, 0.14 };
     std::ofstream outF("stateSpaceFilter_300_step.csv");
     cout << "Printing step response to stateSpaceFilter_300_step.csv" << endl;
     outF << 0.0 << ", " << 0.0 << ", " << ssFilter.filter(0.0, 0.0, 300) << std::endl;
@@ -152,6 +168,16 @@ int main() {
     cout << "Late initialization. IIR Filter, 2nd Order Low Pass Butterworth, cutoff frequency 6Hz, sample frequency 1000Hz" << endl;
     stepResponse<double>(emptyFilter, "lowPass2nd_step_lateInit.csv");
 
+    cout << "Step response for state space filter with f0=8Hz" << endl;
+    StateSpaceFilter<double> ssfiler;
+    stepResponse<double>(ssFilter, 8, "ssfilter8Hz_step.csv");
+
+    cout << "Step response for moving average filter" << endl;
+    std::vector<double> bMa(20, 1. / 20.);
+    std::vector<double> aMa(1, 1.);
+
+    Filter<double> maFilter(TransferFunction<>(bMa, aMa));
+    stepResponse<double>(maFilter, "moving_avg_filter_step.csv");
 
     /*
     std::cout << "p1 = " << p1;

@@ -5,39 +5,42 @@
 #include <vector>
 #include <complex>
 
-namespace vosl { namespace Filter {
+namespace vosl {
+    namespace Filter {
 
-template<typename T = double>
-class StateSpaceFilter {
+        template<typename T = double>
+        class StateSpaceFilter {
 
-public:
-    typedef std::complex<T> Complex;
-    StateSpaceFilter();
-    void resetState();
-    T filter(T value, double time, double f0);
-    T getFilteredValue() {
-        return lastValue;
-    };
-    T getFilteredFirstDerivative()
-    {
-        return lastFirstDerivative;
-    };
-    T getFilteredSecondDerivative()
-    {
-        return lastSecondDerivative;
-    };
-    template<typename U>
-    friend std::ostream& operator<< (std::ostream& os, const StateSpaceFilter<U>& tf);
-private:
-    double lastTime;
-    T lastValue;
-    T lastFirstDerivative;
-    T lastSecondDerivative;
-};
+        public:
+            typedef std::complex<T> Complex;
+            StateSpaceFilter();
+            void resetState();
+            void resetState(double lastTime, double lastValue, double lastFirstDerivative, double lastSecondDerivative);
 
-}} // namespace
+            T filter(T value, double time, double f0);
+            T getFilteredValue() {
+                return lastValue_;
+            };
+            T getFilteredFirstDerivative()
+            {
+                return lastFirstDerivative_;
+            };
+            T getFilteredSecondDerivative()
+            {
+                return lastSecondDerivative_;
+            };
+            std::vector<T> pass(const std::vector<T>& values, double f0);
+            template<typename U>
+            friend std::ostream& operator<< (std::ostream& os, const StateSpaceFilter<U>& tf);
+        private:
+            double lastTime_;
+            T lastValue_;
+            T lastFirstDerivative_;
+            T lastSecondDerivative_;
+        };
+    }
+} // namespace
 
 #include "StateSpaceFilter.cpp"
-
 
 #endif
