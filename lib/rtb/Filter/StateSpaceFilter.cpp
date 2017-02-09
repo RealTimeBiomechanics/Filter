@@ -1,10 +1,25 @@
+/* -------------------------------------------------------------------------- *
+ * Copyright (c) 2010-2016                                                    *
+ * T. van den Bogert, E. Ceseracciu, C. Pizzolato, M. Reggiani                *
+ *                                                                            *
+ * Licensed under the Apache License, Version 2.0 (the "License");            *
+ * you may not use this file except in compliance with the License.           *
+ * You may obtain a copy of the License at:                                   *
+ * http://www.apache.org/licenses/LICENSE-2.0                                 *
+ *                                                                            *
+ * Unless required by applicable law or agreed to in writing, software        *
+ * distributed under the License is distributed on an "AS IS" BASIS,          *
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   *
+ * See the License for the specific language governing permissions and        *
+ * limitations under the License.                                             *
+ * -------------------------------------------------------------------------- */
+
 #include <vector>
 #include <iostream>
 #include <limits>
+#include <cmath>
 
-inline double pi() { return std::atan(1) * 4; } //ndElena: I wanted to mark it as constexpr, but VS2013 does not support it
-
-namespace vosl {
+namespace rtb {
     namespace Filter {
 
         template<typename T>
@@ -27,8 +42,8 @@ namespace vosl {
             else
             {
                 double h = time - lastTime_;
-                double a = (2 * pi() * f0) * (2 * pi() * f0);
-                double b = sqrt(2) * 2 * pi()* f0;
+                double a = (2 * M_PI * f0) * (2 * M_PI * f0);
+                double b = sqrt(2) * 2 * M_PI * f0;
                 double denom = 4 + 2 * h * b + h * h * a;
                 double A = (4 + 2 * h*b - h * h * a) / denom;
                 double B = 4 * h / denom;

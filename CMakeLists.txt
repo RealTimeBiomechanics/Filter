@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.8)
+cmake_minimum_required(VERSION 2.8.11)
 project(Filter)
 
 #should maybe check whether chosen compiler supports c++11
@@ -10,7 +10,6 @@ endif(UNIX)
 set(CMAKE_DEBUG_POSTFIX "d")
 include(GNUInstallDirs)
 
-add_definitions(/D_USE_MATH_DEFINES)
 add_subdirectory(lib)
 add_subdirectory(tests)
 
@@ -33,6 +32,9 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FilterConfigForInstall.cmake
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FilterConfigVersion.cmake
               DESTINATION ${ConfigPackageLocation})
+
+install(EXPORT Filter_Exports NAMESPACE rtb::
+                              DESTINATION ${ConfigPackageLocation})
 
 # Uninstall target
 configure_file(
