@@ -15,17 +15,17 @@ set(Filter_TEMPLATE_IMPLEMENTATIONS rtb/Filter/Filter.cpp
 set_source_files_properties(${Filter_TEMPLATE_IMPLEMENTATIONS} PROPERTIES HEADER_FILE_ONLY TRUE)
 
 source_group("Header files" FILES ${Filter_HEADERS})
-source_group("Source files" FILES ${Filter_TEMPLATE_IMPLEMENTATIONS} ${Filter_SOURCES})
+source_group("Implementation files" FILES ${Filter_TEMPLATE_IMPLEMENTATIONS})
 
-add_library(Filter ${Filter_HEADERS} ${Filter_TEMPLATE_IMPLEMENTATIONS} ${Filter_SOURCES} )
+add_library(Filter INTERFACE)
 
-target_compile_definitions(Filter INTERFACE "USE_MATH_DEFINES")
+target_compile_definitions(Filter INTERFACE "_USE_MATH_DEFINES")
 
-target_include_directories(Filter PUBLIC
+target_include_directories(Filter INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-#set(Filter_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for Filter library")
+add_custom_target(Filter_IDE SOURCES ${Filter_HEADERS} ${Filter_TEMPLATE_IMPLEMENTATIONS})
 
 install(FILES ${Filter_HEADERS} ${Filter_TEMPLATE_IMPLEMENTATIONS}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtb/Filter)
