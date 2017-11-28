@@ -38,7 +38,7 @@ namespace rtb {
 
             Polynomial(size_t order);
             Complex solveFor(Complex value) const;
-            unsigned getOrder() const;
+            size_t getOrder() const;
             size_t getSize() const;
             Complex getCoefficient(unsigned i) const { return coefficients_.at(i); }
             void divideByScalar(Complex value);

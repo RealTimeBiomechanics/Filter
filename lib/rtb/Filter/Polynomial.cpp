@@ -96,7 +96,7 @@ namespace rtb {
             coefficients_(order + 1, .0), size_(order + 1), order_(order) { }
 
         template <typename T>
-        unsigned Polynomial<T>::getOrder() const {
+        size_t Polynomial<T>::getOrder() const {
 
             return order_;
         }
